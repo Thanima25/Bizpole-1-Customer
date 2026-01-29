@@ -134,6 +134,10 @@ function App() {
 
               {/* BizpoleOne Nested Dashboard */}
               <Route path="bizpoleone" element={<BizpoleOneDashboardLayout />}>
+
+
+
+              
                 <Route index element={<BizpoleOne />} /> {/* default inside bizpoleone */}
                 <Route path="package" element={<MyPackages />} />
                 <Route path="orderdetails" element={<MyOrderDetails />} />
