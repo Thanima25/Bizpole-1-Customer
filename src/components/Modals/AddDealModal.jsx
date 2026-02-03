@@ -137,7 +137,8 @@ const AddDealModal = ({ isOpen, onClose, onSuccess }) => {
                 },
                 franchiseeId: user.FranchiseeID || 1,
                 employeeId: user.EmployeeID || 9,
-                isAssociate: true
+                isAssociate: true,
+                AssociateID: user.id || null
             };
 
 

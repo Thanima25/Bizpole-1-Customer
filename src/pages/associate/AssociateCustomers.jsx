@@ -15,7 +15,12 @@ const AssociateCustomers = () => {
     const fetchCustomers = async () => {
         setLoading(true);
         try {
-            const result = await DealsApi.listAssociateCustomers({ page, limit: pageSize });
+            const user = getSecureItem("user") || {};
+            const result = await DealsApi.listAssociateCustomers({
+                page,
+                limit: pageSize,
+                AssociateID: user.id || null
+            });
             if (result.success) {
                 setCustomers(result.data);
                 setTotal(result.total);
@@ -134,8 +139,8 @@ const AssociateCustomers = () => {
                                     key={pageNum}
                                     onClick={() => setPage(pageNum)}
                                     className={`w-8 h-8 rounded-lg text-sm font-medium transition-colors ${page === pageNum
-                                            ? 'bg-[#4b49ac] text-white'
-                                            : 'border border-gray-200 text-gray-600 hover:bg-gray-50'
+                                        ? 'bg-[#4b49ac] text-white'
+                                        : 'border border-gray-200 text-gray-600 hover:bg-gray-50'
                                         }`}
                                 >
                                     {pageNum}

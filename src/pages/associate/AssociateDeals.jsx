@@ -19,7 +19,8 @@ const AssociateDeals = () => {
             const result = await DealsApi.listDeals({
                 employeeId: user.EmployeeID,
                 franchiseId: user.FranchiseeID,
-                isAssociate: true // Filter specifically for associate created deals
+                isAssociate: true, // Filter specifically for associate created deals
+                AssociateID: user.id || null
             });
             if (result.success) {
                 setDeals(result.data || []);

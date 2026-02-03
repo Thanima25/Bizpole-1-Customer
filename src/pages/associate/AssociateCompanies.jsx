@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { MoreVertical, Search, Filter, ArrowLeft, ArrowRight } from 'lucide-react';
 import * as DealsApi from '../../api/DealsApi';
+import { getSecureItem } from '../../utils/secureStorage';
 import { format } from 'date-fns';
 
 const AssociateCompanies = () => {
@@ -15,7 +16,12 @@ const AssociateCompanies = () => {
     const fetchCompanies = async () => {
         setLoading(true);
         try {
-            const result = await DealsApi.listAssociateCompanies({ page, limit: pageSize });
+            const user = getSecureItem("user") || {};
+            const result = await DealsApi.listAssociateCompanies({
+                page,
+                limit: pageSize,
+                AssociateID: user.id || null
+            });
             if (result.success) {
                 setCompanies(result.data);
                 setTotal(result.total);
@@ -152,8 +158,8 @@ const AssociateCompanies = () => {
                                     key={pageNum}
                                     onClick={() => setPage(pageNum)}
                                     className={`w-8 h-8 rounded-lg text-sm font-medium transition-colors ${page === pageNum
-                                            ? 'bg-[#4b49ac] text-white'
-                                            : 'border border-gray-200 text-gray-600 hover:bg-gray-50'
+                                        ? 'bg-[#4b49ac] text-white'
+                                        : 'border border-gray-200 text-gray-600 hover:bg-gray-50'
                                         }`}
                                 >
                                     {pageNum}

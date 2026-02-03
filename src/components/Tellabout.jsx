@@ -235,6 +235,10 @@ const Tellabout = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    const user = getSecureItem("user") || {};
+    const isAssociate = user.role === "associate";
+    const AssociateID = isAssociate ? user.id : null;
+
     if (!formData.FranchiseeID) {
       alert("Please select language, state, and district to assign a franchisee before submitting.");
       return;
@@ -270,6 +274,8 @@ const Tellabout = () => {
       const payload = {
         ...updatedFormData,
         Companies: [company],
+        isAssociate,
+        AssociateID
       };
       const res = await createCustomer(payload);
       console.log("Customer created:", res);
@@ -280,7 +286,7 @@ const Tellabout = () => {
       }
       // Store and log location state
       if (location && location.state) {
-       setSecureItem('location', JSON.stringify(location.state));
+        setSecureItem('location', JSON.stringify(location.state));
         console.log('Location state:', location.state);
       }
       // Pass type id to subscription page
