@@ -16,6 +16,8 @@ const AssociateDeals = () => {
     const [searchTerm, setSearchTerm] = useState('');
     const [creatingQuote, setCreatingQuote] = useState(null); // Track which deal is being converted
 
+    console.log("deals", deals);
+
     const fetchDeals = async () => {
         setLoading(true);
         try {
@@ -69,7 +71,7 @@ const AssociateDeals = () => {
                 name: deal.name,
                 isAssociate: 1,
                 AssociateID: parseInt(AssociateID),
-                SelectedCompany:{
+                SelectedCompany: {
                     CompanyID: deal.CompanyID || 1,
                     CompanyName: deal.CompanyName || "Default Company"
                 },
@@ -89,8 +91,8 @@ const AssociateDeals = () => {
                 }) || [],
             };
 
-            console.log("BBBBB", {quotePayload});
-            
+            console.log("BBBBB", { quotePayload });
+
 
             const result = await upsertQuote(quotePayload);
 
@@ -163,10 +165,8 @@ const AssociateDeals = () => {
                                 <th className="px-6 py-4 text-[11px] font-bold text-slate-500 uppercase tracking-wider">Deal Name</th>
                                 <th className="px-6 py-4 text-[11px] font-bold text-slate-500 uppercase tracking-wider">Status</th>
                                 <th className="px-6 py-4 text-[11px] font-bold text-slate-500 uppercase tracking-wider">Company</th>
-                                <th className="px-6 py-4 text-[11px] font-bold text-slate-500 uppercase tracking-wider">Prob %</th>
                                 <th className="px-6 py-4 text-[11px] font-bold text-slate-500 uppercase tracking-wider">Closure Date</th>
                                 <th className="px-6 py-4 text-[11px] font-bold text-slate-500 uppercase tracking-wider">Services</th>
-                                <th className="px-6 py-4 text-[11px] font-bold text-slate-500 uppercase tracking-wider">Total</th>
                                 <th className="px-6 py-4 text-[11px] font-bold text-slate-500 uppercase tracking-wider">Mobile</th>
                                 <th className="px-6 py-4 text-[11px] font-bold text-slate-500 uppercase tracking-wider text-right">Action</th>
                             </tr>
@@ -175,7 +175,7 @@ const AssociateDeals = () => {
                         <tbody className="divide-y divide-slate-100">
                             {loading ? (
                                 <tr>
-                                    <td colSpan="11" className="px-6 py-20 text-center">
+                                    <td colSpan="9" className="px-6 py-20 text-center">
                                         <div className="flex flex-col items-center gap-3">
                                             <Loader2 className="w-8 h-8 text-[#4b49ac] animate-spin" />
                                             <p className="text-slate-500 font-medium">Loading deals...</p>
@@ -184,7 +184,7 @@ const AssociateDeals = () => {
                                 </tr>
                             ) : error ? (
                                 <tr>
-                                    <td colSpan="11" className="px-6 py-20 text-center">
+                                    <td colSpan="9" className="px-6 py-20 text-center">
                                         <div className="max-w-xs mx-auto space-y-3">
                                             <div className="bg-red-50 text-red-600 p-3 rounded-xl border border-red-100 text-sm">
                                                 {error}
@@ -200,7 +200,7 @@ const AssociateDeals = () => {
                                 </tr>
                             ) : deals.length === 0 ? (
                                 <tr>
-                                    <td colSpan="11" className="px-6 py-20 text-center">
+                                    <td colSpan="9" className="px-6 py-20 text-center">
                                         <div className="flex flex-col items-center gap-3 grayscale opacity-60">
                                             <Search className="w-12 h-12 text-slate-300" />
                                             <p className="text-slate-500 font-medium text-lg">No deals found</p>
@@ -216,7 +216,9 @@ const AssociateDeals = () => {
                                     )
                                     .map((deal, index) => (
                                         <tr key={deal.id} className="hover:bg-slate-50/80 transition-colors group">
-                                            <td className="px-6 py-4 text-sm text-slate-600 font-medium">{index + 1}</td>
+                                            <td className="px-6 py-4 text-sm text-slate-600 font-medium">
+                                                {index + 1}
+                                            </td>
 
                                             <td className="px-6 py-4 text-sm text-slate-400 font-mono tracking-tight">
                                                 {deal.DealCode || "--"}
@@ -243,16 +245,6 @@ const AssociateDeals = () => {
                                                 {deal.CompanyName || "--"}
                                             </td>
 
-                                            <td className="px-6 py-4">
-                                                <div className="w-16">
-                                                    <input
-                                                        type="text"
-                                                        defaultValue={deal.probability || 0}
-                                                        className="w-full px-2 py-1 text-xs border border-slate-200 rounded md:bg-transparent bg-white focus:bg-white focus:ring-2 focus:ring-[#4b49ac]/20 outline-none"
-                                                    />
-                                                </div>
-                                            </td>
-
                                             <td className="px-6 py-4 text-sm text-slate-600">
                                                 {deal.ClosureDate
                                                     ? format(new Date(deal.ClosureDate), "dd-MM-yyyy")
@@ -263,17 +255,11 @@ const AssociateDeals = () => {
                                                 {deal.serviceName || "--"}
                                             </td>
 
-                                            <td className="px-6 py-4 text-sm font-bold text-slate-900">
-                                                {deal.total
-                                                    ? `₹${Number(deal.total).toLocaleString("en-IN")}`
-                                                    : "--"}
-                                            </td>
-
                                             <td className="px-6 py-4 text-sm text-slate-500 font-mono tracking-tighter">
-                                                {deal.mobile}
+                                                {deal.mobile || "--"}
                                             </td>
 
-                                            {/* ✅ ACTION COLUMN (ALWAYS VISIBLE) */}
+                                            {/* ACTION COLUMN */}
                                             <td className="px-6 py-4">
                                                 <div className="flex items-center justify-end gap-2">
                                                     <button
@@ -306,6 +292,7 @@ const AssociateDeals = () => {
                         </tbody>
                     </table>
                 </div>
+
 
                 {!loading && deals.length > 0 && (
                     <div className="px-6 py-4 bg-slate-50 border-t border-slate-200 flex items-center justify-between">
